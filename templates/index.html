@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working Days Off Calculator</title>
+
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eaf6ff;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #007acc;
+            margin-top: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            font-weight: bold;
+            color: #007acc;
+        }
+
+        input[type="date"], input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007acc;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #005f99;
+        }
+
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e0f7ff;
+            border: 1px solid #b3e5fc;
+            border-radius: 5px;
+        }
+
+        .error {
+            color: red;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            background: #f1faff;
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #cce7ff;
+            border-radius: 5px;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .loading span {
+            font-size: 16px;
+            color: #007acc;
+        }
+
+        .loading div {
+            margin: 10px auto;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #007acc;
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+	
+	footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #555555;
+        }
+
+        footer a {
+            color: #0078d7;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+	@keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+    <script>
+        // Display loading animation when form is submitted
+        function showLoading() {
+            document.querySelector(".loading").style.display = "block";
+            document.querySelector("form").style.display = "none";
+        }
+    </script>
+</head>
+<body>
+    <h1>Working Days Off Calculator</h1>
+    <div class="container">
+        <form method="POST" onsubmit="showLoading()">
+            <label for="semester_start_date">Semester Start Date:</label>
+            <input type="date" id="semester_start_date" name="semester_start_date" required>
+
+            <label for="semester_end_date">Semester End Date:</label>
+            <input type="date" id="semester_end_date" name="semester_end_date" required>
+
+            <label for="today_date">Today's Date:</label>
+            <input type="date" id="today_date" name="today_date" required>
+
+            <label for="past_working_days_off">Past Working Days Off:</label>
+            <input type="number" id="past_working_days_off" name="past_working_days_off" required>
+
+            <label for="country_name">Country:</label>
+            <input type="text" id="country_name" name="country_name" placeholder="e.g., India, United Kingdom" required>
+
+            <button type="submit">Calculate</button>
+        </form>
+
+        <div class="loading">
+            <span>Calculating, please wait...</span>
+            <div></div>
+        </div>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        {% if total_days_off is not none %}
+            <div class="results">
+                <h2>Results:</h2>
+                <p>Total working days off you can take: <strong>{{ total_days_off }}</strong></p>
+                <p>Weekly working days off you can take: <strong>{{ weekly_off_days }}</strong></p>
+                <h3>Upcoming Government/Public Holidays:</h3>
+                <ul>
+                    {% for holiday in govt_holidays %}
+                        <li>{{ holiday.strftime('%d %B %Y') }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+    
+<footer>
+    <p>Created by <a href="https://github.com/Jack-spec-hash" target="_blank">Jack-spec-hash</a></p>
+    <p>© 2025 Jack-spec-hash. Licensed under <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>.</p>
+</footer>
+</body>
+</html>
